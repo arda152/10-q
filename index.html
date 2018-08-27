@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>10Q</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="javascript.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+</head>
+
+<body>
+    <section class="section" id="quiz">
+        <div class="columns is-centered">
+            <div class="column is-half has-text-centered">
+                <form onsubmit="return false">
+                    <div class="field">
+                        <div class="label">
+                            Select topic
+                        </div>
+                        <div class="select">
+                            <select>
+                            <option value="sports">
+                                Sports
+                            </option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Select difficulty</label>
+                        <div class="select">
+                            <select>
+                                <option value="easy">
+                                    Easy
+                                </option>
+                                <option value="medium">
+                                    Medium
+                                </option>
+                                <option value="hard">
+                                    Hard
+                                </option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control has-text-centered">
+                            <input type="submit" value="Start Quiz" class="button" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

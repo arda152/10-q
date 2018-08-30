@@ -9,6 +9,27 @@ const categoryCodes = {
     sports: 21
 }
 
+// DOM elements
+let startButton = document.getElementById("startButton");
+
+startButton.addEventListener("click", function() {
+    // Assign values
+    let selectedCategory = document.getElementById("categorySelect").value;
+    let selectedDifficulty = document.getElementById("difficultySelect").value;
+    // Handle errors
+    // checkForErrors();
+    // Generate URL
+    let requestURL = createRequestURL(selectedCategory, selectedDifficulty);
+    // Make http request
+    let quizArray = [];
+    requestQuiz(requestURL).then(function(result) {
+        quizArray = createQuizArray(result);
+        return quizArray;
+    }).then(function(result) {
+        // run display quiz using results
+    });
+});
+
 // Create the request URL using category name and difficulty level
 function createRequestURL(categoryValue, difficultyValue) {
     // Default setup
@@ -17,7 +38,7 @@ function createRequestURL(categoryValue, difficultyValue) {
     url += "&category=" + categoryCodes[categoryValue];
     // Add difficulty level
     url += "&difficulty=" + difficultyValue;
-    url += "type=multiple";
+    url += "&type=multiple";
     return url;
 }
 
@@ -26,4 +47,22 @@ function requestQuiz(url) {
     return fetch(url).then(function(result) {
         return result.json()
     });
+}
+
+// Sort http response into quiz array
+function createQuizArray(response) {
+    let quizArray = [];
+    for (questionData of response.results) {
+        let {
+            question,
+            correct_answer,
+            incorrect_answers
+        } = questionData;
+        quizArray.push({
+            question,
+            correct_answer,
+            incorrect_answers
+        });
+    }
+    return quizArray;
 }

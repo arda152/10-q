@@ -11,6 +11,10 @@ const categoryCodes = {
 
 // DOM elements
 let startButton = document.getElementById("startButton");
+let quizSetup = document.getElementById("quizSetup");
+let quizDisplay = document.getElementsByClassName("quizDisplay");
+let progressDisplay = document.getElementById("progressDisplay");
+let answersDisplay = documnet.getElementById("answersDisplay");
 
 startButton.addEventListener("click", function() {
     // Assign values
@@ -53,15 +57,10 @@ function requestQuiz(url) {
 function createQuizArray(response) {
     let quizArray = [];
     for (questionData of response.results) {
-        let {
-            question,
-            correct_answer,
-            incorrect_answers
-        } = questionData;
         quizArray.push({
-            question,
-            correct_answer,
-            incorrect_answers
+            questionData.question,
+            questionData.correct_answer,
+            questionData.incorrect_answers
         });
     }
     return quizArray;

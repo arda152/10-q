@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <section class="section" id="quiz">
+    <section class="section" id="quizSetup">
         <div class="columns is-centered">
             <div class="column is-half has-text-centered">
                 <form onsubmit="return false">
@@ -69,6 +69,24 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </section>
+    <!--- A section to display questions and answers, hidden at the beginning--->
+    <section class="section hide" id="quizDisplay">
+        <div class="level">
+            <div class="level-item">
+                <div id="progressDisplay">
+                    <!-- Players will see their result here-->
+                </div>
+            </div>
+            <div class="level-item">
+                <p class="title is-4" id="questionDisplay">
+                    <!-- Question will be dynamically added here -->
+                </p>
+            </div>
+        </div>
+        <div class="columns is-centered" id="answersDisplay">
+            <!-- Possible answers will be dynamically added here-->
         </div>
     </section>
 </body>

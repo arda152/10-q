@@ -14,7 +14,7 @@ let startButton = document.getElementById("startButton");
 let quizSetup = document.getElementById("quizSetup");
 let quizDisplay = document.getElementsByClassName("quizDisplay");
 let progressDisplay = document.getElementById("progressDisplay");
-let answersDisplay = documnet.getElementById("answersDisplay");
+let answersDisplay = document.getElementById("answersDisplay");
 
 startButton.addEventListener("click", function() {
     // Assign values
@@ -57,11 +57,11 @@ function requestQuiz(url) {
 function createQuizArray(response) {
     let quizArray = [];
     for (questionData of response.results) {
-        quizArray.push({
-            questionData.question,
-            questionData.correct_answer,
-            questionData.incorrect_answers
-        });
+        quizArray.push({question: question.Dataquestion, correct_answer: questionData.correct_answer, answers: questionData.incorrect_answers});
     }
     return quizArray;
+}
+
+function randomToFour() {
+    return Math.floor(Math.random() * 4) + 1;
 }

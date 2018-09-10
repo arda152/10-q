@@ -51,7 +51,7 @@ function quizInit() {
     let quizArray = [];
     requestQuiz(requestURL).then(function(result) {
         if (!result || result.response_code !== 0) {
-            throw ("something went wrong");
+            throw ("OpenTriviaDB error");
         }
         quizArray = createQuizArray(result);
         return quizArray;
@@ -59,11 +59,12 @@ function quizInit() {
         let quizState = {
             "counter": 0,
             "points": 0,
-            "questionData" : result
+            "questionData" : result,
         };
         quizSetup.classList.add("hide");
         showQuestion(quizState);
     }, function(err) {
+        // note: Logging for now, will turn into helper text on the form in the future
         console.log("error: " + err);
     });
 }
@@ -72,7 +73,9 @@ function quizInit() {
 function showQuestion(quizState) {
     let question = quizState.questionData[quizState.counter];
     questionDisplay.innerHTML = question.question;
-    var answerIsAt = random0to3();
+    let answerIsAt = random0to3();
+    // Save position for future look up
+    question.answerIsAt = answerIsAt;
     for (let i = 0; i < 4; i++) {
         let answerColumn = document.createElement("div");
         answerColumn.classList.add("column", "has-text-centered");
@@ -80,17 +83,16 @@ function showQuestion(quizState) {
         answerButton.classList.add("button");
         answerButton.innerHTML = (answerIsAt === i) ? question.correct_answer : question.incorrect_answers.pop();
         answerButton.id = i;
-        answerButton.addEventListener("click", handleAnswerClick.bind(answerButton, quizState));
+        answerButton.onclick =  handleAnswerClick.bind(answerButton, quizState);
         answerColumn.appendChild(answerButton);
         answersDisplay.appendChild(answerColumn);
     }
 }
 
+// Runs when user answers a question
 function handleAnswerClick(quizState) {
-    // Clear the display
-    answersDisplay.textContent = "";
-    questionDisplay.textContent = "";
-    console.log("clicked on answer " + this.id);
+    // Make sure user only picks one answer
+    removeAllEventListeners();
     // Check the answer, show the correct answer
     let currentCorrectAnswer = quizState.questionData[quizState.counter].correct_answer;
     if (currentCorrectAnswer === this.textContent) {
@@ -99,14 +101,30 @@ function handleAnswerClick(quizState) {
     } else {
         addMark(false);
     }
-    // ...
+    // Correct answer turns to green with delay
+    displayCorrectAnswer(quizState);
     // If the game is over
-    if (quizState.counter === 4) {
-        endQuiz(quizState.points);
-    } else {
-    // Show the next question
-    quizState.counter++;
-    showQuestion(quizState);
+    // Create timeout so user can see the correct answer
+    setTimeout(function () {
+        // Clear the display
+        answersDisplay.textContent = "";
+        questionDisplay.textContent = "";
+        if (quizState.counter === 9) {
+            endQuiz(quizState.points);
+        } else {
+        // Show the next question
+        quizState.counter++;
+        showQuestion(quizState);
+        }
+    }, 1000);
+}
+
+
+function removeAllEventListeners() {
+    for (answerButton of document.querySelectorAll("#answersDisplay a")) {
+        // Correct answer turns to green with delay
+        // This line makes sure user only picks one answer
+        answerButton.onclick = null;
     }
 }
 
@@ -134,6 +152,14 @@ function createRequestURL(categoryValue, difficultyValue) {
     url += "&difficulty=" + difficultyValue;
     url += "&type=multiple";
     return url;
+}
+
+// Turns the correct answer to green with delay
+function displayCorrectAnswer(quizState) {
+    // Find out the correct answer
+    let correctAnswerButton = document.querySelectorAll("#answersDisplay a")[quizState.questionData[quizState.counter].answerIsAt];
+    // Add color class to button
+    correctAnswerButton.classList.add("is-success");
 }
 
 // Returns a promise containing results from request

@@ -12,6 +12,7 @@ const categoryCodes = {
 let counter = 0;
 
 // DOM elements
+let helperText = document.getElementById("helperText")
 let startButton = document.getElementById("startButton");
 let quizSetup = document.getElementById("quizSetup");
 let quizDisplay = document.getElementsByClassName("quizDisplay");
@@ -56,6 +57,8 @@ function quizInit() {
         quizArray = createQuizArray(result);
         return quizArray;
     }).then(function(result) {
+        // Clear helper text in case of previous error messages
+        helperText.textContent = "";
         let quizState = {
             "counter": 0,
             "points": 0,
@@ -64,8 +67,7 @@ function quizInit() {
         quizSetup.classList.add("hide");
         showQuestion(quizState);
     }, function(err) {
-        // note: Logging for now, will turn into helper text on the form in the future
-        console.log("error: " + err);
+        helperText.textContent = "The database doesn't have enough questions. Please pick another category or difficulty level."
     });
 }
 

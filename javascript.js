@@ -1,16 +1,3 @@
-// Object to store category-url code pairs
-const categoryCodes = {
-    animals: 27,
-    art: 25,
-    general_knowledge: 9,
-    history: 23,
-    music: 12,
-    science_and_nature: 17,
-    sports: 21
-}
-
-let counter = 0;
-
 // DOM elements
 let helperText = document.getElementById("helperText")
 let startButton = document.getElementById("startButton");
@@ -67,7 +54,7 @@ function quizInit() {
         quizSetup.classList.add("hide");
         showQuestion(quizState);
     }, function(err) {
-        helperText.textContent = "The database doesn't have enough questions. Please pick another category or difficulty level."
+        helperText.textContent = "The database doesn't have enough questions. Please pick another category or difficulty."
     });
 }
 
@@ -149,7 +136,7 @@ function createRequestURL(categoryValue, difficultyValue) {
     // Default setup
     var url = "https://opentdb.com/api.php?amount=10";
     // Add category code
-    url += "&category=" + categoryCodes[categoryValue];
+    url += "&category=" + categoryValue;
     // Add difficulty level
     url += "&difficulty=" + difficultyValue;
     url += "&type=multiple";

@@ -10,6 +10,15 @@ let resultsDisplay = document.getElementById("resultsDisplay");
 let restartButtonDiv = document.getElementById("restartButtonDiv");
 
 startButton.addEventListener("click", quizInit);
+
+// Create session token so no question repeat
+let sessionToken = "";
+fetch("https://opentdb.com/api_token.php?command=request").then(function(result) {
+    result.json().then(function (result) {
+        sessionToken = result.token;
+    });
+});
+
 function quizRestart() {
     // Cleanup
     progressDisplay.textContent = "";
@@ -29,6 +38,8 @@ function endQuiz(points) {
 }
 
 function quizInit() {
+    // Clear helper text in case of previous error messages
+    helperText.textContent = "";
     // Assign values
     let selectedCategory = document.getElementById("categorySelect").value;
     let selectedDifficulty = document.getElementById("difficultySelect").value;
@@ -44,8 +55,6 @@ function quizInit() {
         quizArray = createQuizArray(result);
         return quizArray;
     }).then(function(result) {
-        // Clear helper text in case of previous error messages
-        helperText.textContent = "";
         let quizState = {
             "counter": 0,
             "points": 0,
@@ -67,7 +76,7 @@ function showQuestion(quizState) {
     question.answerIsAt = answerIsAt;
     for (let i = 0; i < 4; i++) {
         let answerColumn = document.createElement("div");
-        answerColumn.classList.add("column", "has-text-centered");
+        answerColumn.classList.add("column", "has-text-centered", "is-12");
         let answerButton = document.createElement("a");
         answerButton.classList.add("button");
         answerButton.innerHTML = (answerIsAt === i) ? question.correct_answer : question.incorrect_answers.pop();
@@ -140,6 +149,8 @@ function createRequestURL(categoryValue, difficultyValue) {
     // Add difficulty level
     url += "&difficulty=" + difficultyValue;
     url += "&type=multiple";
+    // Add unique session token so no questions repeat
+    url += "&token=" + sessionToken;
     return url;
 }
 

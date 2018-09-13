@@ -7,3 +7,11 @@
     margin: 0 auto;
     text-align: center;
 }
+
+#quizDisplay {
+    padding-top: 0;
+}
+
+#progressDisplay {
+    min-height: 24px;
+}
